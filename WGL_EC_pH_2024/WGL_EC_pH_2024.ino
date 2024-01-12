@@ -1,12 +1,13 @@
 /*
 
 Well Geochemistry Logger
-Version 5.0 | 1 Sept. 2023
+Version 5.0 | 12 Jan. 2024
 Author: Tristan A. Caro
 Author: Harry F. Brodsky
 PI: Alexis S. Templeton
 
 # Pin Config
+# Board: Arduino Nano Every
 ## Isolated Carrier Board (Conductivity)
 RX: D3
 TX: D2
@@ -31,7 +32,7 @@ GND: GND
 +: 3.3V
 -: GND
 A: A1 (D15)
-D: D7 (isn't a D on the board, is a square wave)
+D: D7 (isn't a D on the board, is a square wave symbol)
 
 - Type commands into the Arduino serial monitor to control the EC circuit.
 - This code was written in the Arduino 2.0 IDE
