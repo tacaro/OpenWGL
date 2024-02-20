@@ -1,0 +1,38 @@
+---
+title: "WGL_DATA_2024"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Setup
+
+```{r}
+library(tidyverse)
+
+df <- read_csv("data/27JAN24_TEST_w_pH_2.TXT") |> 
+  filter(cond_uscm != "cond_uscm") |> 
+  mutate_all(as.numeric)
+```
+
+## Inspect
+
+```{r}
+df |> 
+  mutate(n = row_number()) |> 
+  pivot_longer(cols = -n, values_to = "value", names_to = "measurement") |> 
+  ggplot() +
+  aes(
+    x = n,
+    y = value,
+    color = measurement
+  ) +
+  geom_point() +
+  facet_grid(vars(measurement), scales = "free_y") +
+  labs(
+    x = "Reading",
+    y = ""
+  ) +
+  theme_bw()
+```
