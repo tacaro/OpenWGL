@@ -8,29 +8,29 @@ PI: Alexis S. Templeton
 
 # Pin Config
 # Board: Arduino Nano Every
-## Isolated Carrier Board (Conductivity)
+## Isolated Carrier Board (Conductivity) [3.3V]
 RX: D3
 TX: D2
-GND: GND
+GND: GND (RIGHT)
 VCC: 3.3V
 
-## SD Card
+## SD Card [5V]
 VCC: 5V
-GND: GND
+GND: GND (RIGHT)
 CS: D14 (A0)
 SCK: D13
 MOSI: D11
-MISO: D12
+MISO/MOSO: D12
 
-## Bar30
+## Bar30 [5V]
 +5V: 5V
 SDA: SDA (A4)
 SCL: SCL (A5)
-GND: GND
+GND: GND (RIGHT)
 
-## Gravity Analog Isolator (pH)
+## Gravity Analog Isolator (pH) [3.3V]
 +: 3.3V
--: GND
+-: GND (RIGHT)
 A: A1 (D15)
 D: D7 (isn't a D on the board, is a square wave symbol)
 
@@ -47,19 +47,61 @@ D: D7 (isn't a D on the board, is a square wave symbol)
 #define rx 2                                          //define what pin rx is going to be
 #define tx 3                                          //define what pin tx is going to be
 
-
+// Bar30 pressure sensor and SD card
 MS5837 sensor;                                        //Instantiate the Bar30 sensor
 File myFile;                                          //Instantiate myFile for SD
 
+// SD card
 SoftwareSerial myserial(rx, tx);                      //define how the soft serial port is going to work
 const int chipSelect = 14;                            //set our Chip Select (CS) pin to 14
 
+// EC sensor
 String inputstring = "";                              //a string to hold incoming data from the PC
 String sensorstring = "";                             //a string to hold the data from the Atlas Scientific product
 boolean input_string_complete = false;                //have we received all the data from the PC
 boolean sensor_string_complete = false;               //have we received all the data from the Atlas Scientific product
 
+// pH sensor:
+uint8_t user_bytes_received = 0;                
+const uint8_t bufferlen = 32;                   
+char user_data[bufferlen];
 
+
+// pH sensor setup
+// to use the Atlas gravity circuits with the gravity isolator board's pulse output 
+// uncomment line below: #define USE_PULSE_OUT you can use any pins instead of just the analog ones
+// but it must be recalibrated note that the isolator's analog output also provides isolation
+
+// #define USE_PULSE_OUT
+
+#ifdef USE_PULSE_OUT
+  #include "ph_iso_grav.h"       
+  Gravity_pH_Isolated pH = Gravity_pH_Isolated(A1);         
+#else
+  #include "ph_grav.h"             
+  Gravity_pH pH = Gravity_pH(A1);   
+#endif
+
+// This function parses calibration commands to the pH sensor:
+void parse_cmd(char* string) {                   
+  strupr(string);                                
+  if (strcmp(string, "CAL,7") == 0) {       
+    pH.cal_mid();                                
+    Serial.println("MID CALIBRATED");
+  }
+  else if (strcmp(string, "CAL,4") == 0) {            
+    pH.cal_low();                                
+    Serial.println("LOW CALIBRATED");
+  }
+  else if (strcmp(string, "CAL,10") == 0) {      
+    pH.cal_high();                               
+    Serial.println("HIGH CALIBRATED");
+  }
+  else if (strcmp(string, "CAL,CLEAR") == 0) { 
+    pH.cal_clear();                              
+    Serial.println("CALIBRATION CLEARED");
+  }
+}
 
 
 void setup() {                                        //set up the hardware
@@ -72,7 +114,7 @@ void setup() {                                        //set up the hardware
     while (1);
   }
   File dataFile = SD.open("wgl_log.txt", FILE_WRITE); // open the file. note that only one file can be open at a time
-  dataFile.println("cond_uscm,pressure_mbar,temp_C,depth_m,alt_m");                     // write the data
+  dataFile.println("cond_uscm,pH,pressure_mbar,temp_C,depth_m,alt_m");                     // write the data
   dataFile.close();  
   Serial.println("SD initialized.");
   
@@ -80,6 +122,13 @@ void setup() {                                        //set up the hardware
   myserial.begin(9600);                               //set baud rate for the software serial port to 9600
   inputstring.reserve(10);                            //set aside some bytes for receiving data from the PC
   sensorstring.reserve(30);                           //set aside some bytes for receiving data from Atlas Scientific product
+
+  // pH sensor setup
+  Serial.println(F("Use commands \"CAL,7\", \"CAL,4\", and \"CAL,10\" to calibrate the pH circuit to those respective values"));
+  Serial.println(F("Use command \"CAL,CLEAR\" to clear the calibration"));
+  if (pH.begin()) {                                     
+    Serial.println("Loaded EEPROM");
+  }
 
   // Bar30 pressure sensor setup
   Wire.begin();                                       //This function initializes the Wire library and join the I2C bus as a controller or a peripheral. This function should normally be called only once.
@@ -135,23 +184,37 @@ void loop() {                                         //here we go...
       float f_ec;                                         //used to hold a floating point number that is the EC
       
       sensorstring.toCharArray(sensorstring_array, 30);   //convert the string to a char array 
-      EC = strtok(sensorstring_array, ",");               //let's pars the array at each comma
-      TDS = strtok(NULL, ",");                            //let's pars the array at each comma
-      SAL = strtok(NULL, ",");                            //let's pars the array at each comma
-      GRAV = strtok(NULL, ",");                           //let's pars the array at each comma
+      EC = strtok(sensorstring_array, ",");               //let's parse the array at each comma
+      TDS = strtok(NULL, ",");                            //let's parse the array at each comma
+      SAL = strtok(NULL, ",");                            //let's parse the array at each comma
+      GRAV = strtok(NULL, ",");                           //let's parse the array at each comma
+
+      // Update pH reading
+      if (Serial.available() > 0) {                                                      
+        user_bytes_received = Serial.readBytesUntil(13, user_data, sizeof(user_data));   
+      }
+      if (user_bytes_received) {                                                      
+        parse_cmd(user_data);                                                          
+        user_bytes_received = 0;                                                        
+        memset(user_data, 0, sizeof(user_data));                                         
+      }
+      //Serial.println(pH.read_ph());             // uncomment this to print the pH readings to serial monitor                                                  
+
 
       // Update pressure and temperature readings
       sensor.read(); 
       //create a datastring for writing
-      String dataString = String(EC) + 
-                          "," + 
-                          sensor.pressure() + 
-                          "," + 
-                          sensor.temperature() + 
-                          "," + 
-                          sensor.depth() +
-                          "," + 
-                          sensor.altitude();  
+      String dataString = String(EC) +            // EC value
+                          "," +                   // comma separator
+                          pH.read_ph() +          // pH value
+                          "," +                    // comma separator
+                          sensor.pressure() +     // pressure value
+                          "," +                   // you get the idea :)
+                          sensor.temperature() +  // temperature value
+                          "," +                   
+                          sensor.depth() +        // depth value
+                          "," +                   
+                          sensor.altitude();      // altitude value
 
       File dataFile = SD.open("wgl_log.txt", FILE_WRITE); // open the file. note that only one file can be open at a time,
       if (dataFile) {                                     // if the file is available, write to it:
@@ -166,8 +229,8 @@ void loop() {                                         //here we go...
       }
     //f_ec= atof(EC);                                     //uncomment this line to convert the char to a float
     }
-    sensorstring = "";                                //clear the string
-    sensor_string_complete = false;                   //reset the flag used to tell if we have received a completed string from the Atlas Scientific product
+    sensorstring = "";                                    //clear the string
+    sensor_string_complete = false;                       //reset the flag used to tell if we have received a completed string from the Atlas Scientific product
   }
 }
 
@@ -175,9 +238,9 @@ void loop() {                                         //here we go...
 
 
 
-// This is the original EC sensor read function that is provided with the Atlas sample completed
+// This is the original EC sensor read function that is provided with the Atlas sample
 // This function is not called in this version of the script, but is retained here for reference
-// Can most likely be removed
+// Can be removed if you need the memory space
 
 void print_EC_data(void) {                            //this function will pars the string  
 
