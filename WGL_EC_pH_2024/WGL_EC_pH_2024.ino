@@ -8,31 +8,34 @@ PI: Alexis S. Templeton
 
 # Pin Config
 # Board: Arduino Nano Every
+
 ## Isolated Carrier Board (Conductivity) [3.3V]
-RX: D3
-TX: D2
-GND: GND (RIGHT)
-VCC: 3.3V
-
+RX (SCL): D3      --- DONE
+TX (SDA): D2      --- DONE
+GND: GND (RIGHT)  --- DONE
+VCC: 3.3V         --- DONE
+-------------------------------------------------
 ## SD Card [5V]
-VCC: 5V
-GND: GND (RIGHT)
-CS: D14 (A0)
-SCK: D13
-MOSI: D11
-MISO/MOSO: D12
-
+VCC: 5V           --- DONE
+GND: GND (RIGHT)  --- DONE
+CS: D14 (A0)      --- DONE
+SCK: D13          --- DONE
+MOSI: D11         --- DONE
+MISO/MOSO: D12    --- DONE
+-------------------------------------------------
 ## Bar30 [5V]
-+5V: 5V
-SDA: SDA (A4)
-SCL: SCL (A5)
-GND: GND (RIGHT)
-
++5V: 5V           --- DONE
+SDA: SDA (A4)     --- DONE
+SCL: SCL (A5)     --- DONE
+GND: GND (LEFT)   --- DONE  
+-------------------------------------------------
 ## Gravity Analog Isolator (pH) [3.3V]
-+: 3.3V
--: GND (RIGHT)
-A: A1 (D15)
-D: D7 (isn't a D on the board, is a square wave symbol)
++: 3.3V         --- DONE
+-: GND (RIGHT)  --- DONE
+A: A1 (D15)     --- DONE
+D: D7           --- DONE
+NOTE: ("D" isn't a D on the board, it is a square wave symbol)
+-------------------------------------------------
 
 - Type commands into the Arduino serial monitor to control the EC circuit.
 - This code was written in the Arduino 2.0 IDE
