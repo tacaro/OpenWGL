@@ -11,9 +11,8 @@ editor_options:
 ```{r}
 library(tidyverse)
 
-df <- read_csv("data/27JAN24_TEST_w_pH_2.TXT") |> 
-  filter(cond_uscm != "cond_uscm") |> 
-  mutate_all(as.numeric)
+# read in a data file
+df <- read.csv("data/22FEB24_PREFIELD-TEST.TXT")
 ```
 
 ## Inspect
@@ -32,7 +31,11 @@ df |>
   facet_grid(vars(measurement), scales = "free_y") +
   labs(
     x = "Reading",
-    y = ""
+    y = "",
+    title = "Test Submersion: 22 Feb 2024"
   ) +
-  theme_bw()
+  theme_bw() +
+  theme(
+    legend.position = "None"
+  )
 ```
