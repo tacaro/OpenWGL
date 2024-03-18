@@ -9,6 +9,7 @@ Version `1.0` of the WGL was successfully field-deployed in January 2023, being 
 This code was developed by Tristan Caro, Harry Brodsky, and Eric Ellison at the University of Colorado Boulder, Department of Geological Sciences, with support from Alexis Templeton.
 
 The OpenWGL is published under a [CC-BY license](https://creativecommons.org/licenses/by/4.0/deed.en).
+For questions, contact Tristan Caro: tristan.caro@colorado.edu
 
 ## Bill of Materials
 
