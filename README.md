@@ -11,6 +11,9 @@ This code was developed by Tristan Caro, Harry Brodsky, and Eric Ellison at the 
 The OpenWGL is published under a [CC-BY license](https://creativecommons.org/licenses/by/4.0/deed.en).
 For questions, contact Tristan Caro: tristan.caro@colorado.edu
 
+## Coming Soon
+Version `6.0` of the OpenWGL is intended to have an ORP sensor. Testing and development of the `v6.0` prototype is underway.
+
 ## Bill of Materials
 
 **Hull**
