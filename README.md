@@ -1,10 +1,10 @@
 # OpenWGL
 
-This is the codebase for the Open-Source Well Geochemistry Logger (OpenWGL) 2024 version. The WGL is a submersible sonde equipped with sensors for measuring depth, temperature, electrical conductivity (EC), and pH. The sonde is intended for deployment in groundwater monitoring wells measuring \>2" in diameter.
+This is the codebase for the Open-Source Well Geochemistry Logger (OpenWGL) 2024 version. The WGL is a submersible sonde equipped with sensors for measuring depth, temperature, electrical conductivity (EC), and pH. The sonde is intended for deployment in groundwater monitoring wells measuring \>2" in diameter, but can also be deployed to open bodies of water.
 
-The WGL consists of a pressure-rated aluminum cylinder which houses the onboard electronics unit. This electronics unit is powered by the Arduino Nano Every microcontroller platform. The microcontroller interfaces with a Blue Robotics Bar30 sensor, an Atlas Scientific K0.1 EC sensor, and an Atlas Scientific Gravity Analog pH Sensor. The pH sensor is electrically isolated from the EC sensor with an Atlas Scientific Gravity Analog Isolator Board.
+The WGL consists of a pressure-rated aluminum cartridge which houses an onboard electronics unit. This electronics unit is powered by the Arduino Nano Every microcontroller platform. The microcontroller interfaces with a Blue Robotics Bar30 sensor, an Atlas Scientific K0.1 EC sensor, and an Atlas Scientific Gravity Analog pH Sensor. The pH sensor is electrically isolated from the EC sensor with an Atlas Scientific Gravity Analog Isolator Board.
 
-Version `1.0` of the WGL was successfully field-deployed in January 2023, being submerged up to 300m depth, and profiling electrical conductivity across a hyperalkaline well. Version `5.0` is a significantly downsized version. Its hull diameter has been reduced from 75mm to 50mm and its microcontroller downsized from an Arduino Uno to the more powerful Arduino Nano Every.
+Version `1.0` of the WGL was successfully field-deployed in January 2023, being submerged up to 300m depth, and profiling electrical conductivity across [hyperalkaline groundwater borehole observatories in the Samail Ophiolite]([url](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JG006315)). Version `5.0` is a significantly downsized version. Its hull diameter has been reduced from 75mm to 50mm and its microcontroller downsized from an Arduino Uno to the more powerful [Arduino Nano Every]([url](https://docs.arduino.cc/hardware/nano-every/)).
 
 This code was developed by Tristan Caro, Harry Brodsky, and Eric Ellison at the University of Colorado Boulder, Department of Geological Sciences, with support from Alexis Templeton.
 
