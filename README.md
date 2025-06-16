@@ -54,6 +54,11 @@ Version `6.0` of the OpenWGL is intended to have an ORP sensor. Testing and deve
 
 -   JST GH to DF13 Adapter. (Blue Robotics). (x1)
 
+## 3D Models
+
+![](designs/3d_CAD.png)
+![](designs/3d_CAD_exploded.png)
+
 ## Pinout Diagram
 
 ![](designs/OpenWGL_PINOUT.png)
