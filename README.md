@@ -1,6 +1,6 @@
 # OpenWGL
 
-This is the codebase for the Open-Source Well Geochemistry Logger (OpenWGL) 2024 version. The WGL is a submersible sonde equipped with sensors for measuring depth, temperature, electrical conductivity (EC), and pH. The sonde is intended for deployment in groundwater monitoring wells measuring \>2" in diameter, but can also be deployed to open bodies of water.
+This is the codebase for the Open-Source Well Geochemistry Logger (OpenWGL) 2024 version. The WGL is a submersible sonde equipped with sensors for measuring depth, temperature, electrical conductivity (EC), pH, and [soon] ORP. The sonde is intended for deployment in groundwater monitoring wells measuring \>2" in diameter, but can also be deployed to open bodies of water.
 
 The WGL consists of a pressure-rated aluminum cartridge which houses an onboard electronics unit. This electronics unit is powered by the Arduino Nano Every microcontroller platform. The microcontroller interfaces with a Blue Robotics Bar30 sensor, an Atlas Scientific K0.1 EC sensor, and an Atlas Scientific Gravity Analog pH Sensor. The pH sensor is electrically isolated from the EC sensor with an Atlas Scientific Gravity Analog Isolator Board.
 
