@@ -56,8 +56,9 @@ Version `6.0` of the OpenWGL is intended to have an ORP sensor. Testing and deve
 
 ## 3D Models
 
-![](designs/3d_CAD.png)
-![](designs/3d_CAD_exploded.png)
+![](designs/3d_CAD.PNG)
+
+![](designs/3d_CAD_exploded.PNG)
 
 ## Pinout Diagram
 
