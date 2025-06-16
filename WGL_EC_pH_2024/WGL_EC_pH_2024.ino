@@ -206,6 +206,7 @@ void loop() {                                         //here we go...
 
       // Update pressure and temperature readings
       sensor.read(); 
+      
       //create a datastring for writing
       String dataString = String(EC) +            // EC value
                           "," +                   // comma separator
